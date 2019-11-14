@@ -1,0 +1,12 @@
+# build executable
+FROM golang:1.13-alpine AS builder
+
+WORKDIR /go/src/shameful-api
+COPY . .
+
+RUN apk --update add --no-cache --virtual dependency git \
+	&& go get -v -d \
+	&& apk del dependency 
+
+EXPOSE 8093
+

@@ -1,0 +1,8 @@
+FROM base-shameful-api-image:latest
+RUN apk --update add --no-cache git gcc musl-dev \
+	&& go get -u github.com/go-delve/delve/cmd/dlv
+RUN go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o /go/bin/shameful-api ./...;
+
+EXPOSE 2345
+
+CMD ["/go/bin/dlv", "debug", "--headless", "--log", "--listen=:2345", "--api-version=2"]
